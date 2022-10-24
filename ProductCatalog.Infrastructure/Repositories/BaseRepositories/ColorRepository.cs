@@ -1,0 +1,34 @@
+﻿using ProductCatalog.Application.Interfaces.BaseInterfaces;
+using ProductCatalog.Application.Models;
+using ProductCatalog.Domain.Entities.BaseEntities;
+using ProductCatalog.Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProductCatalog.Infrastructure.Repositories.BaseRepositories
+{
+    public class ColorRepository : GenericRepository<ColorEntity>, IColorRepository
+    {
+        public ColorRepository(AppDbContext context) : base(context)
+        {
+        }
+
+        public IQueryable<ColorEntity> GetColorsByFiltering(BaseModel model)
+        {
+            IQueryable<ColorEntity> query = GetAll();
+
+            if (model != null)
+            {
+                if (model.Name != null)
+                {
+                    query = query.Where(x => x.Name.ToLower().Contains(model.Name.ToLower()));
+                }
+            }
+
+            return query;
+        }
+    }
+}
